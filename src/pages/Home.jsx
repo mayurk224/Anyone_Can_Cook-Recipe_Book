@@ -88,7 +88,7 @@ const Home = () => {
     }
   };
   return (
-    <div>
+    <div className="mx-24">
       <Header />
 
       <Slider />
