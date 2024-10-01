@@ -16,6 +16,7 @@ import Slider from "../components/Slider";
 import Recipes from "../components/Recipes";
 import TipsSection from "../components/TipsSection";
 import SocialMediaPost from "../components/SocialMediaPost";
+import UsersRecipes from "../components/UsersRecipes";
 
 const Home = () => {
   const { currentUser } = useAuth(); // Get the current user
@@ -103,6 +104,8 @@ const Home = () => {
       <TipsSection />
 
       <SocialMediaPost />
+
+      <UsersRecipes />
 
       {/* <div className="max-w-6xl mx-auto p-6 mt-10">
         <h2 className="text-2xl font-bold mb-6">All Recipes</h2>
