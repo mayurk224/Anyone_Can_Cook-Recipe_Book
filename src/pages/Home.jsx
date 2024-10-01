@@ -13,6 +13,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Category from "../components/Category";
 import Slider from "../components/Slider";
+import Recipes from "../components/Recipes";
+import TipsSection from "../components/TipsSection";
 
 const Home = () => {
   const { currentUser } = useAuth(); // Get the current user
@@ -95,7 +97,11 @@ const Home = () => {
 
       <Category />
 
-      <div className="max-w-6xl mx-auto p-6 mt-10">
+      <Recipes />
+
+      <TipsSection/>
+
+      {/* <div className="max-w-6xl mx-auto p-6 mt-10">
         <h2 className="text-2xl font-bold mb-6">All Recipes</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {recipes.length > 0 ? (
@@ -113,13 +119,13 @@ const Home = () => {
                   <strong>Servings:</strong> {recipe.servings}
                 </p>
 
-                {/* Favorite Button (Toggle) */}
+                
                 <button
                   onClick={() => handleFavoriteToggle(recipe.id)}
                   className={`px-3 py-1 rounded-md mt-4 ${
                     favorites.includes(recipe.id)
-                      ? "bg-red-500 text-white" // Highlighted if in favorites
-                      : "bg-blue-500 text-white" // Normal if not in favorites
+                      ? "bg-red-500 text-white" 
+                      : "bg-blue-500 text-white" 
                   }`}
                 >
                   {favorites.includes(recipe.id) ? "Unfavorite" : "Favorite"}
@@ -130,7 +136,7 @@ const Home = () => {
             <p>No recipes found.</p>
           )}
         </div>
-      </div>
+      </div> */}
 
       <Footer />
     </div>
