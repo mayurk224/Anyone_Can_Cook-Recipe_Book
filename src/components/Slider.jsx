@@ -1,10 +1,30 @@
-import { useRef, useState } from "react";
-import Image from "../assets/muffin.jpg";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Slider = () => {
-  // State and ref to handle the active slide and scrolling
   const [activeIndex, setActiveIndex] = useState(0);
   const slideGroupRef = useRef(null);
+  const [recipes, setRecipes] = useState([]);
+  const navigate = useNavigate();
+
+  // Fetch random recipes from the API
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const response = await fetch("https://dummyjson.com/recipes?limit=0");
+        const data = await response.json();
+        // Randomly select 5 recipes
+        const shuffledRecipes = data.recipes
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 5);
+        setRecipes(shuffledRecipes);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      }
+    };
+
+    fetchRecipes();
+  }, []);
 
   // Function to scroll to the selected slide
   const scrollToSlide = (index) => {
@@ -21,7 +41,7 @@ const Slider = () => {
   // Handler for the next button
   const handleNext = () => {
     setActiveIndex((prevIndex) => {
-      const newIndex = Math.min(prevIndex + 1, 1); // Change 1 to the number of slides - 1
+      const newIndex = Math.min(prevIndex + 1, recipes.length - 1); // Updated logic based on recipes length
       scrollToSlide(newIndex);
       return newIndex;
     });
@@ -36,79 +56,57 @@ const Slider = () => {
     });
   };
 
+  const viewRecipeDetails = (id) => {
+    navigate(`/recipe-details/${id}`); // Navigate to the recipe details page with the recipe ID
+  };
+
   return (
     <div className="">
       <div
         ref={slideGroupRef}
         className="slideGroup flex flex-nowrap overflow-hidden scroll-smooth rounded-3xl"
       >
-        {/* Slide 1 */}
-        <div className="bg-slate-500 w-full rounded-3xl h-[550px] flex overflow-hidden flex-shrink-0">
-          <div className="w-1/2 px-14 pt-10">
-            <h3 className=" bg-slate-100 w-fit px-3 py-2 rounded-3xl text-base font-semibold">
-              📃 Hot Recipes
-            </h3>
-            <h1 className="text-6xl font-semibold leading-tight mt-5">
-              Spicy delicious chicken wings
-            </h1>
-            <p className="mt-5">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tenetur
-              maiores quo in incidunt sed, ipsa animi illum ut aut vel nisi
-              quisquam obcaecati. Illum aperiam, veniam possimus a cupiditate.
-            </p>
-            <div className="flex mt-6 gap-7">
-              <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
-                🕧 30 minutes
+        {recipes.map((recipe) => (
+          <div
+            key={recipe.id}
+            className="bg-slate-500 w-full rounded-3xl h-[550px] flex overflow-hidden flex-shrink-0"
+          >
+            <div className="w-1/2 px-14 pt-10 flex flex-col">
+              <h3 className="bg-slate-100 w-fit px-3 py-2 rounded-3xl text-base font-semibold">
+                📃 Hot Recipes
               </h3>
-              <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
-                🍴 Dinner
-              </h3>
+              <h1 className="text-6xl font-semibold leading-tight mt-5">
+                {recipe.name}
+              </h1>
+              <h3 className="mt-4">Rating ⭐ {recipe.rating}</h3>
+
+              <div className="flex mt-6 gap-7">
+                <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
+                  🕧 {recipe.prepTimeMinutes} mins
+                </h3>
+                <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
+                  🍴 {recipe.mealType.join(", ")}
+                </h3>
+              </div>
+              <div className="flex mt-6 gap-7">
+                <h3>{recipe.tags.join(", ")}</h3>
+              </div>
+              <button
+                onClick={() => viewRecipeDetails(recipe.id)} // On click, navigate to the recipe details page
+                className="bg-black text-white text-lg rounded-xl font-semibold px-4 py-2 mt-7 w-fit"
+              >
+                View Recipe <span className="rotate-90 scale-125">🔺</span>
+              </button>
             </div>
-            <button className="bg-black text-white text-lg rounded-xl font-semibold px-4 py-2 mt-7">
-              View Recipe <span className="rotate-90 scale-125">🔺</span>
-            </button>
-          </div>
-          <div className="w-1/2">
-            <img
-              src={Image}
-              alt="Recipe"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-        {/* Slide 2 */}
-        <div className="bg-slate-500 w-full rounded-3xl h-[550px] flex overflow-hidden flex-shrink-0">
-          <div className="w-1/2 px-14 pt-10">
-            <h3 className=" bg-slate-100 w-fit px-3 py-2 rounded-3xl text-base font-semibold">
-              📃 Hot Recipes
-            </h3>
-            <h1 className="text-6xl font-semibold leading-tight mt-5">
-              Delicious Grilled Steak
-            </h1>
-            <p className="mt-5">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vitae,
-              mollitia. Animi fugiat repellat reprehenderit corporis maiores!
-            </p>
-            <div className="flex mt-6 gap-7">
-              <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
-                🕧 45 minutes
-              </h3>
-              <h3 className="px-3 py-2 rounded-3xl font-semibold bg-slate-600">
-                🍴 Lunch
-              </h3>
+            <div className="w-1/2">
+              <img
+                src={recipe.image}
+                alt="Recipe"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <button className="bg-black text-white text-lg rounded-xl font-semibold px-4 py-2 mt-7">
-              View Recipe <span className="rotate-90 scale-125">🔺</span>
-            </button>
           </div>
-          <div className="w-1/2">
-            <img
-              src={Image}
-              alt="Recipe"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
+        ))}
       </div>
       {/* Navigation Buttons */}
       <div className="buttonGroup flex justify-end gap-2 mt-3">
@@ -126,8 +124,10 @@ const Slider = () => {
         </button>
         <button
           onClick={handleNext}
-          className={`${activeIndex === 1 ? "opacity-50" : ""}`}
-          disabled={activeIndex === 1}
+          className={`${
+            activeIndex === recipes.length - 1 ? "opacity-50" : ""
+          }`}
+          disabled={activeIndex === recipes.length - 1}
         >
           <img
             width="48"

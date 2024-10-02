@@ -14,8 +14,8 @@ import RecipeDetails from "./pages/RecipeDetails";
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router basename="/">
+      <AuthProvider>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
@@ -63,8 +63,8 @@ const App = () => {
             }
           />
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

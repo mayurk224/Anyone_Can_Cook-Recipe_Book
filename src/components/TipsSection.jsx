@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const TipsSection = () => {
   return (
-    <div className="my-10">
+    <div className="my-24">
       <div
         className="rounded-3xl"
         style={{

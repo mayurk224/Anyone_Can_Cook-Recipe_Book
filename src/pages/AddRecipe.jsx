@@ -51,8 +51,8 @@ const AddRecipe = () => {
       // Step 1: Add the recipe (without the image) to the 'recipes' collection with the current user's UID and timestamp
       const newRecipeRef = await addDoc(collection(db, "recipes"), {
         name: recipe.name,
-        ingredients: recipe.ingredients.split(","),
-        instructions: recipe.instructions.split(","),
+        ingredients: recipe.ingredients.split(";"),
+        instructions: recipe.instructions.split(";"),
         prepTimeMinutes: parseInt(recipe.prepTimeMinutes, 10),
         cookTimeMinutes: parseInt(recipe.cookTimeMinutes, 10),
         servings: parseInt(recipe.servings, 10),
@@ -64,7 +64,7 @@ const AddRecipe = () => {
         rating: parseFloat(recipe.rating),
         userId: currentUser?.uid, // Add current user ID
         createdAt: serverTimestamp(), // Add timestamp
-        imageUrl: "", // Initially empty, will be updated later with the image URL
+        image: "", // Initially empty, will be updated later with the image URL
       });
 
       // Step 2: Upload the image to Firebase Storage if an image is selected
@@ -94,7 +94,7 @@ const AddRecipe = () => {
 
             // Step 3: Update the recipe document with the image URL
             await updateDoc(newRecipeRef, {
-              imageUrl: downloadURL, // Update recipe with the image URL
+              image: downloadURL, // Update recipe with the image URL
             });
 
             // Step 4: Update the current user's document to include the recipe ID in the recipes array
